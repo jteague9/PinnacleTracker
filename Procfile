@@ -1,2 +1,2 @@
 release: python manage.py migrate --noinput
-web: gunicorn PinnnacleTracker.wsgi --log-file -
+web: gunicorn PinnacleTracker.wsgi --log-file -
