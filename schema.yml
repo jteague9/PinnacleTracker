@@ -1,0 +1,186 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/tournaments/:
+    get:
+      operationId: listTournaments
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tournament'
+          description: ''
+      tags:
+      - api
+  /api/tournaments/{tournament_id}/:
+    get:
+      operationId: retrieveTournament
+      description: ''
+      parameters:
+      - name: tournament_id
+        in: path
+        required: true
+        description: A unique value identifying this tournament.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+          description: ''
+      tags:
+      - api
+  /api/matchups/:
+    get:
+      operationId: listMatchups
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Matchup'
+          description: ''
+      tags:
+      - api
+  /api/matchups/{matchup_id}/:
+    get:
+      operationId: retrieveMatchup
+      description: ''
+      parameters:
+      - name: matchup_id
+        in: path
+        required: true
+        description: A unique value identifying this matchup.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matchup'
+          description: ''
+      tags:
+      - api
+  /api/matchups/{matchup_id}/period/{period_id}/:
+    get:
+      operationId: retrievePeriod
+      description: ''
+      parameters:
+      - name: matchup_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: period_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Period'
+          description: ''
+      tags:
+      - api
+components:
+  schemas:
+    Tournament:
+      type: object
+      properties:
+        tournament_id:
+          type: integer
+        name:
+          type: string
+          maxLength: 30
+        matchups:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+      required:
+      - tournament_id
+      - name
+      - matchups
+      - created
+    Matchup:
+      type: object
+      properties:
+        tournament_id:
+          type: integer
+        matchup_id:
+          type: integer
+        home_player:
+          type: string
+          maxLength: 30
+        away_player:
+          type: string
+          maxLength: 30
+        periods:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+          nullable: true
+        created:
+          type: string
+          format: date-time
+      required:
+      - tournament_id
+      - matchup_id
+      - home_player
+      - away_player
+      - created
+    Period:
+      type: object
+      properties:
+        period:
+          type: integer
+        home_player:
+          type: string
+        away_player:
+          type: string
+        moneylines:
+          type: array
+          items:
+            type: object
+            properties:
+              home_price:
+                type: integer
+              away_price:
+                type: integer
+              recorded_at:
+                type: string
+                format: date-time
+            required:
+            - home_price
+            - away_price
+            - recorded_at
+          readOnly: true
+      required:
+      - period
+      - home_player
+      - away_player
