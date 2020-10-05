@@ -50,3 +50,16 @@ class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Period
         fields = ['period', 'home_player', 'away_player', 'moneylines']
+
+
+class BriefMatchupSerializer(serializers.ModelSerializer):
+    home_price = BettingOddsField(source='get_latest_mlr.home_price')
+    away_price = BettingOddsField(source='get_latest_mlr.away_price')
+    tournament = serializers.CharField(source='matchup.tournament.name')
+    home_player = serializers.CharField(source='matchup.home_player')
+    away_player = serializers.CharField(source='matchup.away_player')
+    start_time = serializers.DateTimeField(source='matchup.start_time')
+
+    class Meta:
+        model = Period
+        fields = ['tournament', 'home_player', 'away_player', 'home_price', 'away_price', 'start_time']

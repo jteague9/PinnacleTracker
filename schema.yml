@@ -101,6 +101,22 @@ paths:
           description: ''
       tags:
       - api
+  /api/latest/:
+    get:
+      operationId: listPeriods
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BriefMatchup'
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     Tournament:
@@ -145,6 +161,9 @@ components:
           type: string
           format: date-time
           nullable: true
+        open:
+          type: string
+          readOnly: true
         created:
           type: string
           format: date-time
@@ -169,9 +188,9 @@ components:
             type: object
             properties:
               home_price:
-                type: integer
+                type: string
               away_price:
-                type: integer
+                type: string
               recorded_at:
                 type: string
                 format: date-time
@@ -184,3 +203,26 @@ components:
       - period
       - home_player
       - away_player
+    BriefMatchup:
+      type: object
+      properties:
+        tournament:
+          type: string
+        home_player:
+          type: string
+        away_player:
+          type: string
+        home_price:
+          type: string
+        away_price:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+      required:
+      - tournament
+      - home_player
+      - away_player
+      - home_price
+      - away_price
+      - start_time

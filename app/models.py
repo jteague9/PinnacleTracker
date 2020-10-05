@@ -45,6 +45,9 @@ class Period(models.Model):
     def __str__(self):
         return f"Period(matchup:{self.matchup}, period:{self.period})"
 
+    def get_latest_mlr(self):
+        return MoneylineRecord.objects.filter(period=self).order_by('-created_at').first()
+
 
 class MoneylineRecord(models.Model):
     home_price = models.IntegerField()

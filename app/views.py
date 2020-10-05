@@ -1,5 +1,5 @@
-from app.models import Tournament, Matchup, Period, MoneylineRecord
-from .serializers import *
+from app.models import Tournament, Matchup, Period
+from app.serializers import TournamentSerializer, MatchupSerializer, PeriodSerializer, BriefMatchupSerializer
 from rest_framework import generics
 from django.http import Http404
 from django.db.models import Q
@@ -59,3 +59,8 @@ class PeriodDetail(generics.RetrieveAPIView):
             return Period.objects.get(matchup__matchup_id=matchup_id, period=period_id)
         except Period.DoesNotExist:
             raise Http404
+
+
+class LatestPeriodsList(generics.ListAPIView):
+    serializer_class = BriefMatchupSerializer
+    queryset = Period.objects.filter(matchup__start_time__gt=timezone.now(), period=0)

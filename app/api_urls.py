@@ -11,4 +11,5 @@ urlpatterns = [
     path('matchups/', views.MatchupList.as_view()),
     path('matchups/<int:matchup_id>/', views.MatchupDetail.as_view()),
     path('matchups/<int:matchup_id>/period/<int:period_id>/', views.PeriodDetail.as_view()),
+    path('latest/', views.LatestPeriodsList.as_view()),
 ]
