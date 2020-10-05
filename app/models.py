@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 
 
 class Tournament(models.Model):
@@ -26,6 +27,10 @@ class Matchup(models.Model):
 
     def __str__(self):
         return f"Matchup(home:{self.home_player}, away:{self.away_player}, tournament:{self.tournament.name})"
+
+    @property
+    def open(self):
+        return timezone.now() < self.start_time
 
 
 class Period(models.Model):

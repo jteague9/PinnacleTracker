@@ -1,8 +1,9 @@
-from app.models import *
+from app.models import Tournament, Matchup, Period, MoneylineRecord
 from .serializers import *
 from rest_framework import generics
 from django.http import Http404
 from django.db.models import Q
+from django.utils import timezone
 
 
 class TournamentList(generics.ListAPIView):
@@ -29,9 +30,15 @@ class MatchupList(generics.ListAPIView):
 
     def get_queryset(self):
         player = self.request.query_params.get('player')
+        is_open = self.request.query_params.get('open')
         matchup_filter = Q()
         if player:
             matchup_filter &= Q(home_player__iexact=player) | Q(away_player__iexact=player)
+        if is_open is not None:
+            if is_open.lower() == 'false':
+                matchup_filter &= Q(start_time__lt=timezone.now())
+            if is_open.lower() == 'true':
+                matchup_filter &= Q(start_time__gt=timezone.now())
         return Matchup.objects.filter(matchup_filter)
 
 
