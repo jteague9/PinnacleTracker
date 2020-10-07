@@ -80,9 +80,15 @@ def count_db_entries():
 def purge_records_until_limit(limit: int):
     print("reduce until", limit)
     while count_db_entries() >= limit:
-        print("over limit... reducing")
         last_matchup = Matchup.objects.all().order_by('start_time').first()
+        print("deleting matchup...", last_matchup)
         last_matchup.delete()
+
+    # delete tournaments which no longer relate to any matchups
+    for tournament in Tournament.objects.all():
+        if Matchup.objects.filter(tournament=tournament).count() == 0:
+            print("deleting tournament... ", tournament.name)
+            tournament.delete()
 
 
 if __name__ == "__main__":
