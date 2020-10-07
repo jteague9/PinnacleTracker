@@ -63,4 +63,4 @@ class PeriodDetail(generics.RetrieveAPIView):
 
 class LatestPeriodsList(generics.ListAPIView):
     serializer_class = BriefMatchupSerializer
-    queryset = Period.objects.filter(matchup__start_time__gt=timezone.now(), period=0)
+    queryset = Period.objects.filter(matchup__start_time__gt=timezone.now(), period=0).order_by('matchup__start_time')
