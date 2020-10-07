@@ -23,7 +23,7 @@ class Matchup(models.Model):
     modified_at: datetime = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-start_time', 'matchup_id']
 
     def __str__(self):
         return f"Matchup(home:{self.home_player}, away:{self.away_player}, tournament:{self.tournament.name})"
