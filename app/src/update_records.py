@@ -68,5 +68,22 @@ def _delete_middle_record(period: Period) -> bool:
     return False
 
 
+def count_db_entries():
+    count = 0
+    count += MoneylineRecord.objects.all().count()
+    count += Period.objects.all().count()
+    count += Matchup.objects.all().count()
+    count += Tournament.objects.all().count()
+    return count
+
+
+def purge_records_until_limit(limit: int):
+    print("reduce until", limit)
+    while count_db_entries() >= limit:
+        print("over limit... reducing")
+        last_matchup = Matchup.objects.all().order_by('start_time').first()
+        last_matchup.delete()
+
+
 if __name__ == "__main__":
     fetch_moneylines()
