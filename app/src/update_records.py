@@ -38,13 +38,13 @@ def _add_moneyline_record(matchup: dict, straight: dict) -> MoneylineRecord:
     tournament_name = tournament['name'].split('StarCraft 2 - ')[-1]
     tournament_id = tournament['id']
 
-    t, _ = Tournament.objects.get_or_create(tournament_id=tournament_id, defaults={'name': tournament_name})
+    t, _ = Tournament.objects.update_or_create(tournament_id=tournament_id, defaults={'name': tournament_name})
 
     matchup_id = matchup['id']
     home_player = [p['name'] for p in matchup['participants'] if p['alignment'] == 'home'][0]
     away_player = [p['name'] for p in matchup['participants'] if p['alignment'] == 'away'][0]
     start_time = matchup['startTime']
-    m, _ = Matchup.objects.get_or_create(tournament=t, matchup_id=matchup_id, defaults={
+    m, _ = Matchup.objects.update_or_create(tournament=t, matchup_id=matchup_id, defaults={
         'home_player': home_player, 'away_player': away_player, 'start_time': start_time
     })
 
