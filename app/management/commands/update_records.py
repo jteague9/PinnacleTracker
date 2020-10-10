@@ -34,6 +34,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "-w",
             "--winners",
+            action="store_true",
             help="Update all the winners for closed matchups",
         )
 
