@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
-from app.src.update_records import fetch_moneylines, purge_duplicate_ml_records, count_db_entries, purge_records_until_limit
+from app.src.update_records import fetch_moneylines, purge_duplicate_ml_records,\
+    count_db_entries, purge_records_until_limit
+from app.src.update_winner import update_all_winners
 
 
 class Command(BaseCommand):
@@ -29,6 +31,11 @@ class Command(BaseCommand):
             "--reduce-to",
             help="Reduce total db records to specified limit",
         )
+        parser.add_argument(
+            "-w",
+            "--winners",
+            help="Update all the winners for closed matchups",
+        )
 
     def handle(self, *args, **options):
         if options.get('fetch'):
@@ -39,3 +46,5 @@ class Command(BaseCommand):
             print(count_db_entries())
         if options.get('reduce_to'):
             purge_records_until_limit(int(options['reduce_to']))
+        if options.get('winners'):
+            update_all_winners()

@@ -1,13 +1,13 @@
-from app.src.pinnacleapi import PinnacleAPI, BASE_URL
+from app.src.pinnacle_api import PinnacleAPI, BASE_URL
 from app.models import *
 from os import environ as env
 
-API_KEY = env['API_KEY']
+PINNACLE_KEY = env['PINNACLE_KEY']
 ESPORTS_ID = '12'
 
 
 def fetch_moneylines():
-    client = PinnacleAPI(BASE_URL, API_KEY)
+    client = PinnacleAPI(BASE_URL, PINNACLE_KEY)
     esports = client.get_leagues(ESPORTS_ID).json()
 
     for league in esports:
@@ -89,7 +89,3 @@ def purge_records_until_limit(limit: int):
         if Matchup.objects.filter(tournament=tournament).count() == 0:
             print("deleting tournament... ", tournament.name)
             tournament.delete()
-
-
-if __name__ == "__main__":
-    fetch_moneylines()

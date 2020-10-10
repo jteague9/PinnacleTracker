@@ -21,6 +21,7 @@ class Matchup(models.Model):
     start_time: datetime = models.DateTimeField(null=True, blank=True)
     created_at: datetime = models.DateTimeField(auto_now_add=True)
     modified_at: datetime = models.DateTimeField(auto_now=True)
+    winner = models.CharField(max_length=30, null=True, blank=True)
 
     class Meta:
         ordering = ['-start_time', 'matchup_id']

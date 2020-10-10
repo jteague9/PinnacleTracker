@@ -18,7 +18,7 @@ class MatchupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Matchup
         fields = ['tournament_id', 'matchup_id', 'home_player', 'away_player',
-                  'periods', 'start_time', 'open', 'created']
+                  'periods', 'start_time', 'open', 'winner', 'created']
 
 
 class BettingOddsField(serializers.Field):
