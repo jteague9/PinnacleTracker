@@ -4,8 +4,9 @@ from django.utils import timezone
 
 
 def _get_player_id(name: str) -> int:
-    response = AligulacAPI.get_player(name.lower()).json()
-    for p in response['players']:
+    r = AligulacAPI.get_player(name.lower())
+    body = r.json()
+    for p in body['players']:
         if p['tag'].lower() == name.lower():
             return p['id']
 
@@ -14,11 +15,19 @@ def _get_correct_matchup(matchup: Matchup, matchup_list: list) -> dict:
     periods = Period.objects.filter(matchup=matchup)
     period_count = max([p.period for p in periods])
     d = matchup.start_time
-    for mu in matchup_list:
-        winner_game_count = max(mu['sca'], mu['scb'])
-        if mu['date'] == f"{d.year}-{d.month:02}-{d.day:02}"\
-           and period_count == (winner_game_count * 2) - 1:
-            return mu
+
+    # if we find a match on the same day with same number of games, return this match
+    # sometimes the betting lines do not reflect the correct number of games
+    # so we will miss the match
+    # so we check a 2nd time and ignore the number of games, if no match was found through the first pass
+    first_run = True
+    for _ in range(2):
+        for mu in matchup_list:
+            winner_game_count = max(mu['sca'], mu['scb'])
+            if mu['date'] == f"{d.year}-{d.month:02}-{d.day:02}":
+                if not first_run or period_count == (winner_game_count * 2) - 1:
+                    return mu
+            first_run = False
 
 
 def get_matchup_winner(matchup: Matchup) -> str:
@@ -26,10 +35,14 @@ def get_matchup_winner(matchup: Matchup) -> str:
     away_player = matchup.away_player
     home_id = _get_player_id(home_player)
     away_id = _get_player_id(away_player)
+    print(home_player, home_id)
+    print(away_player, away_id)
+
     client = AligulacAPI(BASE_URL)
     r = client.get_match_history(home_id, away_id)
-    response = r.json()
-    correct_match = _get_correct_matchup(matchup, response['objects'])
+    body = r.json()
+
+    correct_match = _get_correct_matchup(matchup, body['objects'])
 
     try:
         winner = _get_winner(correct_match)
