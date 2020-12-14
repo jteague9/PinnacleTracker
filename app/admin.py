@@ -14,7 +14,7 @@ class TournamentAdmin(admin.ModelAdmin):
 class MatchupAdmin(admin.ModelAdmin):
     list_display = ("matchup_id", "tournament", "home_player", "away_player", "start_time", "winner")
     readonly_fields = ("created_at", "modified_at")
-    search_fields = ("matchup_id", "tournament", "home_player", "away_player")
+    search_fields = ("matchup_id", "tournament__tournament_id", "home_player", "away_player")
     ordering = ("-created_at",)
 
 
@@ -22,7 +22,7 @@ class MatchupAdmin(admin.ModelAdmin):
 class PeriodAdmin(admin.ModelAdmin):
     list_display = ("matchup", "period")
     readonly_fields = ("created_at", "modified_at")
-    search_fields = ("matchup",)
+    search_fields = ("matchup__matchup_id",)
     ordering = ("-created_at",)
 
 
