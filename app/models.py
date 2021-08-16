@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Tournament(models.Model):
     tournament_id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     created_at: datetime = models.DateTimeField(auto_now_add=True)
     modified_at: datetime = models.DateTimeField(auto_now=True)
 
